@@ -21,26 +21,29 @@ app.get("/", function (req, res) {
 // your first API endpoint...
 app.get("/api/:date", function (req, res) {
   const { date } = req.params;
-
-    let checker = Number(date);
-    if (!isNaN(checker)){
-    const utcDate = new Date(checker).toUTCString();
+  let checker = Number(date);
+  console.log(date);
   
-    res.json({ unix: checker,
-      utc: utcDate
-    });
-  }
+    if (!isNaN(checker)) {
+      const utcDate = new Date(checker).toUTCString();
 
-  else {
-    const utcTimestamp = new Date(date).getTime();
-    const utcDate = new Date(date).toUTCString();
-  
-    res.json({ unix: utcTimestamp,
-      utc: utcDate
-    });
-  }
+      res.json({ unix: checker, utc: utcDate });
+    } else {
+      const utcTimestamp = new Date(date).getTime();
+      const utcDate = new Date(date).toUTCString();
+      if (isNaN(utcTimestamp)) {
+        res.json({ error: "Invalid Date" });
+      } else {
+        res.json({ unix: utcTimestamp, utc: utcDate });
+      }
+    }
   
 });
+app.get("/api/",function(req,res){
+    const utcDate = new Date().toUTCString();
+    const utcTimestamp = new Date().getTime();
+    res.json({ unix: utcTimestamp, utc: utcDate });
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
